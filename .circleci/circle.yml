@@ -28,7 +28,7 @@ jobs:
           name: run test
           command: |
             . venv/bin/activate
-            nosetests pergola/pergola/test/test_all.py
+            python pergola/pergola/test/test_all.py
 
   deploy:
     docker:

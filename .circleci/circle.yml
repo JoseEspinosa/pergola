@@ -25,7 +25,7 @@ jobs:
               - "venv"
 
       - run:
-          name: run test
+          name: run tests
           command: |
             . venv/bin/activate
             python pergola/pergola/test/test_all.py

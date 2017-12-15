@@ -20,9 +20,13 @@
 
 # from distutils.core import setup
 from setuptools import setup
-from os import path
+from setuptools.command.install import install
+from os import path, getenv
+from sys import exit
 
 PATH = path.abspath(path.split(path.realpath(__file__))[0])
+
+VERSION = "0.1.0"
 
 TAGS = [
     "Development Status :: 2 - Pre-Alpha",
@@ -77,14 +81,14 @@ def ask(string, valid_values, default=-1, case_sensitive=False):
 
     return v
 
-
 PYTHON_DEPENDENCIES = [
     ["csv"       , "Required for reading csv input files.", 1],
     ["argparse"  , "Required to read scripts arguments", 1],
     ["numpy"     , "Required for reading arrays from Jaaba matlab files and arange.", 1],
     ["bcbio"     , "Required for reading isatab files, aka biopy-isatab", 0],
     ["scipy"     , "Required for reading Jaaba matlab files.", 0],
-    ["pybedtools", "Required to create pybedtools objects from Bed, BedGraph and Gff pergola objects.", 0]]
+    ["pybedtools", "Required to create pybedtools objects from Bed, BedGraph and Gff pergola objects.", 0],
+    ["pandas"    , "Required for reading Jaaba matlab files.", 0]]
 
 
 print "Checking dependencies..."
@@ -111,9 +115,22 @@ if path.exists ("README.rst"):
     with open('README.rst') as file:
         long_description = file.read()
 
+class VerifyVersionCommand(install):
+    """Custom command to verify that the git tag matches version in setup"""
+    description = 'verify that the git tag matches our version'
+
+    def run(self):
+        tag = getenv('CIRCLE_TAG')
+
+        if tag != VERSION:
+            info = "Git tag: {0} does not match the version of this app: {1}".format(
+                tag, VERSION
+            )
+            exit(info)
+
 def main():
-    setup(name='pergola',
-          version='0.1',
+    setup(name='test_circleCI',
+          version=VERSION,
           description='A library to analyze and visualize behavioral data by unlocking genomic tools',
           long_description= long_description,
           url='http://github.com/cbcrg/pergola',
@@ -133,7 +150,11 @@ def main():
                   'pergola_rules.py = scripts.pergola_rules:main',
                   'jaaba_to_pergola = scripts.jaaba_to_pergola:main',
                   'pergola_isatab.py = scripts.pergola_isatab:main',
-              ]}
+              ]},
+          cmdclass={
+              'verify': VerifyVersionCommand,
+          }
+
           )
 
 if __name__ == '__main__':

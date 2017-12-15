@@ -1,0 +1,99 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:2.7.13
+    steps:
+      - checkout
+
+      - restore_cache:
+        key: v1-dependencies-{{ checksum "setup.py" }}
+
+      - run:
+          name: install python dependencies
+          command: |
+            pip install virtualenv
+            virtualenv venv
+            pip install -r pergola/requirements.txt
+            pip install scipy
+            pip install twine
+            python setup.py install
+
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}
+            paths:
+              - "venv"
+
+      - run:
+          name: run test
+          command: |
+            . venv/bin/activate
+            nosetests pergola/test/test_all.py
+
+  deploy:
+    docker:
+      - image: circleci/python:2.7.13
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "setup.py" }}
+
+      - run:
+          name: install python dependencies
+          command: |
+            pip install virtualenv
+            virtualenv venv
+            pip install -r pergola/requirements.txt
+            pip install scipy
+            pip install twine
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "setup.py" }}
+          paths:
+            - "venv"
+
+      - run:
+          name: verify git tag vs. version
+          command: |
+            virtualenv venv
+            . venv/bin/activate
+            python setup.py verify
+
+      - run:
+          name: init .pypirc
+          command: |
+            echo -e "[testpypi]" >> ~/.pypirc
+            echo -e "username = JoseEspinosa" >> ~/.pypirc
+            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
+      - run:
+          name: create packages
+          command: |
+            python setup.py sdist
+            python setup.py bdist_wheel
+      - run:
+          name: upload to testpypi
+          command: |
+            . venv/bin/activate
+            twine upload --repository testpypi dist/*
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              only:
+              - master
+              filters:
+
+ignore: /.*/

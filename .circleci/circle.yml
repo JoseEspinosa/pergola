@@ -23,6 +23,14 @@ jobs:
           key: v1-dependency-cache-{{ checksum "setup.py" }}
             paths:
               - "venv"
+  test:
+    docker:
+      - image: circleci/python:2.7.13
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "setup.py" }}
 
       - run:
           name: run tests
@@ -90,6 +98,10 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - test:
+          requires:
+            - build
+
       - deploy:
           requires:
             - build

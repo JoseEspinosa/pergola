@@ -29,11 +29,21 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "setup.py" }}
+      - run:
+          name: install python dependencies
+          command: |
+            pip install virtualenv
+            virtualenv venv
+            pip install -r pergola/requirements.txt
+            pip install scipy
+            pip install twine
+            python setup.py install
+
+#      - restore_cache:
+#          key: v1-dependencies-{{ checksum "setup.py" }}
 
       - run:
-          name: run tests
+          name: check pergola
           command: |
             . venv/bin/activate
             python pergola/pergola/test/test_all.py

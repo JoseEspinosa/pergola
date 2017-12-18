@@ -6,8 +6,8 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-        key: v1-dependencies-{{ checksum "setup.py" }}
+#      - restore_cache:
+#        key: v1-dependencies-{{ checksum "setup.py" }}
 
       - run:
           name: install python dependencies
@@ -23,11 +23,12 @@ jobs:
           key: v1-dependency-cache-{{ checksum "setup.py" }}
             paths:
               - "venv"
-  test:
-    docker:
-      - image: circleci/python:2.7.13
-    steps:
-      - checkout
+
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            python pergola/pergola/test/test_all.py
 
       - run:
           name: install python dependencies
@@ -100,37 +101,19 @@ jobs:
             . venv/bin/activate
             twine upload --repository testpypi dist/*
 
-
-#workflows:
-#  version: 2
-#  build_and_test:
-#    jobs:
-#      - build
-#      - test:
-#          requires:
-#            - build
-#          filters:
-#            branches:
-#              only: master
-
 workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - build:
+          filters:
+            tags:
+              only: /.*/
       - deploy:
           requires:
             - build
-            - test
           filters:
             tags:
               only: /[0-9]+(\.[0-9]+)*/
             branches:
-              only:
-              - master
-              filters:
-
 ignore: /.*/

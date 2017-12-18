@@ -14,10 +14,10 @@ jobs:
           command: |
             pip install virtualenv
             virtualenv venv
-            pip install -r pergola/requirements.txt
+            pip install -r project/requirements.txt
             pip install scipy
             pip install twine
-            python setup.py install
+            python project/setup.py install
 
 #      - save_cache:
 #          key: v1-dependency-cache-{{ checksum "setup.py" }}

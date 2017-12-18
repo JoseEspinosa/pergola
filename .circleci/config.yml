@@ -3,9 +3,24 @@ jobs:
   build:
     docker:
       - image: circleci/python:2.7.13
+
+# works
+#    steps:
+#      - checkout
+#      - run: sudo pip install -r requirements.txt
+ works
     steps:
       - checkout
-      - run: pip install -r requirements.txt
+      - run:
+          name: install python dependencies
+          command: |
+            sudo pip install virtualenv
+            virtualenv venv
+            sudo pip install -r requirements.txt
+            sudo pip install scipy
+            sudo pip install twine
+            sudo python setup.py install
+
 
 #      - restore_cache:
 #        key: v1-dependencies-{{ checksum "setup.py" }}

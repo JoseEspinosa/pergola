@@ -33,7 +33,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            . venv/bin/activate
+            . pergola/venv/bin/activate
             python pergola/test/test_all.py
 
 

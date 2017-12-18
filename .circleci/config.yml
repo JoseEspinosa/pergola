@@ -30,6 +30,13 @@ jobs:
           paths:
             - "venv"
 
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            python pergola/pergola/test/test_all.py
+
+
 #      - restore_cache:
 #        key: v1-dependencies-{{ checksum "setup.py" }}
 

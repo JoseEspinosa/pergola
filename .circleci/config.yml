@@ -11,6 +11,10 @@ jobs:
 # works
     steps:
       - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "setup.py" }}
+
       - run:
           name: install python dependencies
           command: |

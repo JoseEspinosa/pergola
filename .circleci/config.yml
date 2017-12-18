@@ -25,6 +25,10 @@ jobs:
             sudo pip install twine
             sudo python setup.py install
 
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}
+          paths:
+            - "venv"
 
 #      - restore_cache:
 #        key: v1-dependencies-{{ checksum "setup.py" }}

@@ -34,7 +34,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python pergola/pergola/test/test_all.py
+            python pergola/test/test_all.py
 
 
 #      - restore_cache:

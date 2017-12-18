@@ -5,19 +5,20 @@ jobs:
       - image: circleci/python:2.7.13
     steps:
       - checkout
+      - run: pip install -r pergola/requirements.txt
 
 #      - restore_cache:
 #        key: v1-dependencies-{{ checksum "setup.py" }}
 
-      - run:
-          name: install python dependencies
-          command: |
-            pip install virtualenv
-            virtualenv venv
-            pip install -r project/requirements.txt
-            pip install scipy
-            pip install twine
-            python project/setup.py install
+#      - run:
+#          name: install python dependencies
+#          command: |
+#            pip install virtualenv
+#            virtualenv venv
+#            pip install -r project/requirements.txt
+#            pip install scipy
+#            pip install twine
+#            python project/setup.py install
 
 #      - save_cache:
 #          key: v1-dependency-cache-{{ checksum "setup.py" }}
@@ -94,15 +95,15 @@ jobs:
 #          command: |
 #            . venv/bin/activate
 #            twine upload --repository testpypi dist/*
-
-workflows:
-  version: 2
-  build_and_deploy:
-    jobs:
-      - build:
-          filters:
-            tags:
-              only: /.*/
+#
+#workflows:
+#  version: 2
+#  build_and_deploy:
+#    jobs:
+#      - build:
+#          filters:
+#            tags:
+#              only: /.*/
 #      - deploy:
 #          requires:
 #            - build

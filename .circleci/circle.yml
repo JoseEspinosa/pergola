@@ -6,8 +6,8 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-        key: v1-dependencies-{{ checksum "setup.py" }}
+#      - restore_cache:
+#        key: v1-dependencies-{{ checksum "setup.py" }}
 
       - run:
           name: install python dependencies
@@ -19,10 +19,10 @@ jobs:
             pip install twine
             python setup.py install
 
-      - save_cache:
-          key: v1-dependency-cache-{{ checksum "setup.py" }}
-            paths:
-              - "venv"
+#      - save_cache:
+#          key: v1-dependency-cache-{{ checksum "setup.py" }}
+#            paths:
+#              - "venv"
   test:
     docker:
       - image: circleci/python:2.7.13

@@ -87,7 +87,7 @@ PYTHON_DEPENDENCIES = [
     ["numpy"     , "Required for reading arrays from Jaaba matlab files and arange.", 1],
     ["bcbio"     , "Required for reading isatab files, aka biopy-isatab", 0],
     ["scipy"     , "Required for reading Jaaba matlab files.", 0],
-    # ["pybedtools", "Required to create pybedtools objects from Bed, BedGraph and Gff pergola objects.", 0],
+    ["pybedtools", "Required to create pybedtools objects from Bed, BedGraph and Gff pergola objects.", 0],
     ["pandas"    , "Required for reading Jaaba matlab files.", 0]]
 
 

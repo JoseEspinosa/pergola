@@ -48,12 +48,6 @@ jobs:
           command: |
             . venv/bin/activate
             python pergola/pergola/test/test_all.py
-
-#      - store_artifacts:
-#          path: test-reports
-#          destination: test-reports
-
-
   deploy:
     docker:
       - image: circleci/python:2.7.13

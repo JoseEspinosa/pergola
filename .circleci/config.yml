@@ -49,7 +49,6 @@ jobs:
               echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
               sudo python setup.py sdist
               sudo python setup.py bdist_wheel
-              . venv/bin/activate
               twine upload --repository testpypi dist/*
             else
               echo "Not a release, skipping build"

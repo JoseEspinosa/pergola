@@ -29,6 +29,55 @@ jobs:
           paths:
             - "venv"
 
+  deploy:
+    docker:
+      - image: circleci/python:2.7.13
+    steps:
+      - checkout
+
+      - run:
+          name: install python dependencies
+          command: |
+            pip install -r requirements.txt
+            pip install scipy
+            pip install twine
+            python setup.py verify
+
+      - run:
+          name: init .pypirc
+          command: |
+            echo -e "[testpypi]" >> ~/.pypirc
+            echo -e "username = JoseEspinosa" >> ~/.pypirc
+            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
+      - run:
+          name: create packages
+          command: |
+            python setup.py sdist
+            python setup.py bdist_wheel
+      - run:
+          name: upload to testpypi
+          command: |
+            . venv/bin/activate
+            twine upload --repository testpypi dist/*
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+#ignore: /.*/
+
+
 #      - run:
 #          name: run tests
 #          command: |

@@ -18,7 +18,7 @@ jobs:
       - run:
           name: install python dependencies
           command: |
-            sudo pip install virtualenv
+#            sudo pip install virtualenv
             virtualenv venv
             . venv/bin/activate
             sudo pip install -r requirements.txt
@@ -36,7 +36,6 @@ jobs:
           command: |
             . venv/bin/activate
             python pergola/test/test_all.py
-
 
 #      - restore_cache:
 #        key: v1-dependencies-{{ checksum "setup.py" }}

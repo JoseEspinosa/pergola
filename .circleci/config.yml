@@ -55,18 +55,13 @@ jobs:
             . venv/bin/activate
             twine upload --repository testpypi dist/*
 
-#deployment:
-#  fake_deploy_for_cci2:
-#    tag: /.*/
-#    commands:
-#      - echo "make tags run in 2.0"
-
 workflows:
   version: 2
   build-test-and-deploy:
     jobs:
-      - build
-          tags:
+      - build:
+          filters:
+            tags:
               only: /.*/
       - deploy:
           requires:

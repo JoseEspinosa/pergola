@@ -36,6 +36,7 @@ jobs:
             sudo pip install -r requirements.txt
             sudo pip install scipy
             sudo pip install twine
+            echo "a"
             python setup.py verify
 
       - run:

@@ -36,24 +36,24 @@ jobs:
             sudo pip install -r requirements.txt
             sudo pip install scipy
             sudo pip install twine
-            python setup.py verify
 
       - run:
           name: init .pypirc
           command: |
-            echo -e "[testpypi]" >> ~/.pypirc
-            echo -e "username = JoseEspinosa" >> ~/.pypirc
-            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
-      - run:
-          name: create packages
-          command: |
-            sudo python setup.py sdist
-            sudo python setup.py bdist_wheel
-      - run:
-          name: upload to testpypi
-          command: |
-            . venv/bin/activate
-            twine upload --repository testpypi dist/*
+            if git log -1 --decorate --all --oneline --graph | grep "[0-9]\+\.[0-9]\+\.[0-9]";
+            then
+              CIRCLE_TAG=$(git describe)
+              python setup.py verify
+              echo -e "[testpypi]" >> ~/.pypirc
+              echo -e "username = JoseEspinosa" >> ~/.pypirc
+              echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
+              sudo python setup.py sdist
+              sudo python setup.py bdist_wheel
+              . venv/bin/activate
+              twine upload --repository testpypi dist/*
+            else
+              echo "Not a release, skipping build"
+            fi
 
 workflows:
   version: 2

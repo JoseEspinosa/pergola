@@ -4,11 +4,6 @@ jobs:
     docker:
       - image: circleci/python:2.7.13
 
-# works
-#    steps:
-#      - checkout
-#      - run: sudo pip install -r requirements.txt
-# works
     steps:
       - checkout
 
@@ -70,7 +65,7 @@ workflows:
             - build
           filters:
             tags:
-              only: /[0-9]+(\.[0-9]+)*/
+              only: /[0-9]+(\.[0-9]+)+(\.[0-9]+)*/
             branches:
 
 

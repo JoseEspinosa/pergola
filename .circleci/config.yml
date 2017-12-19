@@ -13,7 +13,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "setup.py" }}
+          key: dependency-cache-{{ checksum "setup.py" }}
 
       - run:
           name: install python dependencies
@@ -24,9 +24,10 @@ jobs:
             sudo pip install scipy
             sudo pip install twine
             sudo python setup.py install
+            python test/test_all.py
 
       - save_cache:
-          key: v1-dependency-cache-{{ checksum "setup.py" }}
+          key: dependency-cache-{{ checksum "setup.py" }}
           paths:
             - "venv"
 

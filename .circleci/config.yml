@@ -44,6 +44,10 @@ jobs:
             then
               CIRCLE_TAG=$(git describe)
               python setup.py verify
+              echo -e "[distutils]"
+              echo -e "index-servers="
+              echo -e " testpypi"
+              echo -e " pypi"
               echo -e "[testpypi]" >> ~/.pypirc
               echo -e "repository: https://test.pypi.org/legacy/" >> ~/.pypirc
               echo -e "username = JoseEspinosa" >> ~/.pypirc

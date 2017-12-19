@@ -45,6 +45,7 @@ jobs:
               CIRCLE_TAG=$(git describe)
               python setup.py verify
               echo -e "[testpypi]" >> ~/.pypirc
+              echo -e "repository: https://test.pypi.org/legacy/" >> ~/.pypirc
               echo -e "username = JoseEspinosa" >> ~/.pypirc
               echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
               sudo python setup.py sdist

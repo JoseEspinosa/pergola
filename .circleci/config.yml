@@ -24,7 +24,7 @@ jobs:
             sudo pip install scipy
             sudo pip install twine
             sudo python setup.py install
-            python test/test_all.py
+            python pergola/test/test_all.py
 
       - save_cache:
           key: dependency-cache-{{ checksum "setup.py" }}

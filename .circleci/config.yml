@@ -42,6 +42,7 @@ jobs:
           command: |
             if git log -1 --decorate --all --oneline --graph | grep "[0-9]\+\.[0-9]\+\.[0-9]";
             then
+              echo -e "check"
               CIRCLE_TAG=$(git describe)
               python setup.py verify
               echo -e "[distutils]" >> ~/.pypirc
